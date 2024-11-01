@@ -12,10 +12,16 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14, 16, 18]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        uses: actions/setup-node@v4
+          with:
+            node-version: ${{ matrix.node-version }}
 
       - name: Build and test
         working-directory: ./hangman-api
