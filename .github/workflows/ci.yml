@@ -17,7 +17,7 @@ jobs:
       - name: build and tests
         uses: actions/checkout@v4
         working-directory: ./hangman-api
-        run: | # This '|' symbol allows to write several commands
+        run: | # This '|' symbol allows to write several commands 
           npm ci
           npm run build --if-present
           npm test
