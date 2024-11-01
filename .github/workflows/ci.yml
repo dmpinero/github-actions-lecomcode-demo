@@ -47,6 +47,7 @@ jobs:
 
   finish:
     needs: test
+    if: always()  # Agregamos esta condición
     runs-on: ubuntu-latest
     
     steps:
