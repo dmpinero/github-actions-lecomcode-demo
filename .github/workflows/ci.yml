@@ -44,3 +44,11 @@ jobs:
         run: |
           npm ci
           npm test
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: hello
+        run: echo "Hello, workflow has finished"
