@@ -1,19 +1,27 @@
+# Optional - The name of the workflow as it will appear in the "Actions" tab of the GitHub repository. If this field is omitted, the name of the workflow file will be used instead.
 name: CI
 
-on: # Evento que desencadenará la ejecución del job (push a la rama main o pull_request a la rama main)
-    push:
-        branches:
-            - "main"
-    pull_request:
-        branches: [main]
+# Specifies the trigger for this workflow. In this case, the workflow will be trigger when a PR is opened to main or when commits are pushed into main.
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches: [ main ]
 
+# Groups together all the jobs that run in this workflow.
 jobs:
-    audit:
-        runs-on: # el job se ejecutará en la última versión de ubuntu
+  # Defines a job named 'audit'
+  audit:
+    # Configures the job to run on the latest version of an Ubuntu Linux runner. Jobs can be run in self-hosted runners too.
+    runs-on: ubuntu-latest
 
-    steps: # Pasos a realizar
-        - name: Inspect_machine
-        run: | # El símbolo '|' permite escribir varios comandos
+    # Groups together all the steps that run in the 'audit' job. Each item nested under this section is a separate action (uses) or shell script (run).
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v4
+      - name: Inspect machine
+        run: | # This '|' symbol allows to write several commands
           ls -al
           whoami
           pwd
