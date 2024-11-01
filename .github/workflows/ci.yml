@@ -1,0 +1,20 @@
+name: CI
+
+on: # Evento que desencadenará la ejecución del job (push a la rama main o pull_request a la rama main)
+    push:
+        branches:
+            - "main"
+    pull_request:
+        branches: [main]
+
+jobs:
+    audit:
+        runs-on: # el job se ejecutará en la última versión de ubuntu
+
+    steps: # Pasos a realizar
+        - name: Inspect_machine
+        run: | # El símbolo '|' permite escribir varios comandos
+          ls -al
+          whoami
+          pwd
+          node -v
