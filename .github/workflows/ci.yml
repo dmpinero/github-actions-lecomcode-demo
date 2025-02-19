@@ -10,6 +10,7 @@ on:
   pull_request:
     branches: [ main ]
     paths: [ "hangman-api/**" ]
+  workflow_dispatch: # This event allows us to run the workflow manually from the GitHub Actions tab
 
 jobs:
   build:
@@ -36,17 +37,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: dependencies
+          path: hangman-api/node_modules
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
 
       - name: Install dependencies and run tests
         working-directory: ./hangman-api
-        run: |
-          npm ci
-          npm test
+        run: npm test
+        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dependencies
+          path: hangman-api/node_modules
 
   finish:
-    needs: test
+    needs: test  # Agregamos la dependencia
     runs-on: ubuntu-latest
     
     steps:
