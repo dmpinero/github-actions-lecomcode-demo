@@ -47,7 +47,7 @@ jobs:
 
   finish:
     needs: test
-    if: always()  # Agregamos esta condición para que se ejecute siempre
+    if: ${{ always() }}  # Agregamos esta condición para que se ejecute siempre
     runs-on: ubuntu-latest
     
     steps:
