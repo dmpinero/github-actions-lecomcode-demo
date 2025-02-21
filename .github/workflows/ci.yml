@@ -1,63 +1,42 @@
-# Optional - The name of the workflow as it will appear in the "Actions" tab of the GitHub repository. If this field is omitted, the name of the workflow file will be used instead.
 name: CI
 
-# Specifies the trigger for this workflow. In this case, the workflow will be trigger when a PR is opened to main or when commits are pushed into main.
 on:
   push:
     branches:
       - "main"
-    paths: [ "hangman-api/**" ]
+    paths: [ 'hangman-api/**' ]
   pull_request:
     branches: [ main ]
-    paths: [ "hangman-api/**" ]
-  workflow_dispatch: # This event allows us to run the workflow manually from the GitHub Actions tab
+    paths: [ 'hangman-api/**' ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-
-      - name: Build
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: 'npm'
+          cache-dependency-path: hangman-api/package-lock.json
+      - name: build
         working-directory: ./hangman-api
         run: |
           npm ci
           npm run build --if-present
 
-  test:
-    needs: build  # Agregamos la dependencia
-    runs-on: ubuntu-latest
-    
+  tests:
+    runs-on: ubuntu-20.04
+    needs: build
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          name: dependencies
-          path: hangman-api/node_modules
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-
-      - name: Install dependencies and run tests
+          node-version: 16
+      - name: test
         working-directory: ./hangman-api
-        run: npm test
-        
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dependencies
-          path: hangman-api/node_modules
-
-  finish:
-    needs: test  # Agregamos la dependencia
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: hello
-        run: echo "Hello, workflow has finished"
+        run: |
+          npm ci
+          npm test
