@@ -41,12 +41,50 @@ jobs:
           npm ci
           npm test
 
+  # test-integration:
+  #   runs-on: ubuntu-latest
+  #   needs: tests
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: test-integration
+  #       working-directory: ./hangman-api
+  #       run: docker compose -f test-integration.yml run test-integration
+
   test-integration:
-    runs-on: ubuntu-latest
+    runs-on: ubutnu-latest
     needs: tests
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: test-integration
-        working-directory: ./hangman-api
-        run: docker compose -f test-integration.yml run test-integration
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: hangman
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        
+        steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v4
+          with:
+            node-version: 16
+        - name: Create database relationships
+          working-directory: ./hangman-api
+          env:
+            DATABASE_PORT: 5432
+            DATABASE_HOST: localhost
+            DATABASE_NAME: hangman_db
+            DATABASE_USER: postgres
+            DATABASE_PASSWORD: postgres
+            DATABASE_POOL_MIN: 2
+            DATABASE_POOL_MAX: 10
+          run: |
+            npm ci
+            npx knex migrate:latest --env development          
