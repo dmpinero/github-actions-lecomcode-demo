@@ -41,4 +41,4 @@ jobs:
             path: hangman-api/dist
         - name: Build Docker image
           working-directory: ./hangman-api
-          run: docker build -t dmpinero/hangman-api:$(date + %s) -f Dockerfile.workflow .
+          run: docker build -t dmpinero/hangman-api:$(date +%s) -f Dockerfile.workflow .
