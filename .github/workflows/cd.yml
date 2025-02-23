@@ -28,17 +28,17 @@ jobs:
           name: build-code
           path: hangman-api/dist/
 
-    delivery:
-      runs-on: ubuntu-latest
-      needs: build
+  delivery:
+    runs-on: ubuntu-latest
+    needs: build
       
-      steps:
+    steps:
         - uses: actions/checkout@v4
         - name: Download dist folder as artifact
           uses: actions/download-artifact@v3
           with:
             name: build-code
-            path: hangman-api/dist/
-        - name: Build and push Docker image
+            path: hangman-api/dist
+        - name: Build Docker image
           working-directory: ./hangman-api
           run: docker build -t dmpinero/hangman-api:$(date + %s) -f Dockerfile.workflow .
