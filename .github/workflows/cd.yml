@@ -7,8 +7,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  reusable-build:
+    uses: ./.github/workflows/reusable-node-build.yml
+    with:
+      node-version: 16
+      working-directory: ./hangman-api
+
+  buildAndPush:
     runs-on: ubuntu-latest
+    needs: reusable-build
 
     steps:
       - uses: actions/checkout@v4
