@@ -41,7 +41,7 @@ jobs:
           name: build-code
           path: hangman-api/dist
       - name: Docker Hub login
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         with:
           username: "dmpinero"
           password: ${{ secrets.DOCKER_PASSWORD }}
