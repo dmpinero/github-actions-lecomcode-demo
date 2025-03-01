@@ -53,4 +53,4 @@ jobs:
           context: ./hangman-api
           push: true
           tags: dmpinero/hangman-api-actions:v2
-          #file: ./Dockerfile.workflow
+          file: ./Dockerfile.workflow
